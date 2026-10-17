@@ -1,13 +1,10 @@
 import AceLogo from './components/AceLogo';
-import Cursor from './components/Cursor';
 import Ticker from './components/Ticker';
 import { site } from './content';
 
 export default function App() {
   return (
     <div className="page">
-      <Cursor />
-
       <header className="nav">
         <a className="nav-mark" href="/" aria-label="ACE home">
           <AceLogo />

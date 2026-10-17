@@ -1,5 +1,5 @@
 // The cursor arrow from the ACE logo, described along its own axis (u = from tip to tail,
-// v = sideways) and then rotated to the logo's angle. Shared by the logo and the custom cursor.
+// v = sideways) and then rotated to the logo's angle. Also used to generate the favicon.
 const ANGLE = (54 * Math.PI) / 180;
 
 const SHAPE = [

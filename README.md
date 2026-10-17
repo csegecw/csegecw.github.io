@@ -16,8 +16,7 @@ npm run dev
 - `src/styles.css`: colours and fonts (tokens at the top), layout and animations.
 - `src/components/AceLogo.jsx`: the logo, redrawn as SVG from the original artwork. The arrow and
   letters invert where they overlap.
-- `src/components/Cursor.jsx`: the logo arrow as the mouse cursor, plus click rings.
-- `src/arrow.js`: the arrow shape shared by the logo, cursor and favicon.
+- `src/arrow.js`: the arrow shape shared by the logo and favicon.
 
 ## Deploy
 

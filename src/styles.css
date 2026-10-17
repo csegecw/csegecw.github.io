@@ -214,47 +214,6 @@ a {
   fill: currentColor;
 }
 
-/* ---------- Custom cursor ---------- */
-html.has-cursor,
-html.has-cursor * {
-  cursor: none !important;
-}
-
-.cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  pointer-events: none;
-  transform-origin: 0 0;
-  mix-blend-mode: difference;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  will-change: transform;
-}
-
-.cursor.is-visible {
-  opacity: 1;
-}
-
-.cursor svg {
-  display: block;
-  fill: #fff;
-}
-
-.click-ring {
-  position: fixed;
-  z-index: 99;
-  width: 18px;
-  height: 18px;
-  margin: -9px 0 0 -9px;
-  border: 1.5px solid #fff;
-  border-radius: 50%;
-  pointer-events: none;
-  mix-blend-mode: difference;
-  animation: ring 0.7s var(--ease-out) forwards;
-}
-
 /* ---------- Keyframes ---------- */
 @keyframes letter-rise {
   to {
@@ -286,13 +245,6 @@ html.has-cursor * {
 @keyframes marquee {
   to {
     transform: translateX(-50%);
-  }
-}
-
-@keyframes ring {
-  to {
-    transform: scale(5);
-    opacity: 0;
   }
 }
 
