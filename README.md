@@ -12,7 +12,7 @@ npm run dev
 
 ## Edit
 
-- `src/content.js`: all text, nav links, stats (currently placeholders), pills and ticker.
+- `src/content.js`: all text, including the ticker.
 - `src/styles.css`: colours and fonts (tokens at the top), layout and animations.
 - `src/components/AceLogo.jsx`: the logo, redrawn as SVG from the original artwork. The arrow and
   letters invert where they overlap.

@@ -75,10 +75,10 @@ a {
 
 /* ---------- Nav ---------- */
 .nav {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
-  gap: 28px;
+  justify-content: space-between;
+  gap: 16px;
   padding: 18px var(--gutter);
   animation: fade-in 0.8s ease 1.6s both;
 }
@@ -89,47 +89,12 @@ a {
   color: var(--ink);
 }
 
-.nav nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 24px;
-}
-
-.nav nav a,
 .nav-place {
+  color: var(--muted);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  text-decoration: none;
-}
-
-.nav nav a {
-  position: relative;
-  padding: 4px 0;
-}
-
-.nav nav a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1.5px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.4s var(--ease-out);
-}
-
-.nav nav a:hover::after,
-.nav nav a:focus-visible::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-.nav-place {
-  color: var(--muted);
 }
 
 /* ---------- Hero ---------- */
@@ -178,50 +143,6 @@ a {
   animation: rise-in 0.9s var(--ease-out) 1.1s both;
 }
 
-/* Dashed rule, as on the letterhead */
-.dash {
-  width: min(420px, 80%);
-  height: 0;
-  margin: clamp(20px, 3.4vh, 34px) 0;
-  border: 0;
-  border-top: 1.5px dashed var(--ink);
-  opacity: 0.55;
-  transform-origin: center;
-  animation: draw 1s var(--ease-out) 1.2s both;
-}
-
-.stats {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: clamp(28px, 6vw, 72px);
-  animation: fade-in 0.8s ease 1.3s both;
-}
-
-.stats li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-align: left;
-}
-
-.stat-num {
-  min-width: 2ch;
-  font-size: clamp(32px, 4vw, 46px);
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.03em;
-}
-
-.stat-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  line-height: 1.35;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
 /* ---------- Logo ---------- */
 .ace-logo {
   display: block;
@@ -255,51 +176,7 @@ a {
   opacity: 1;
 }
 
-/* ---------- Bottom: pills + ticker ---------- */
-.foot {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(18px, 3vh, 28px);
-}
-
-.pills {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  padding: 0 var(--gutter);
-  animation: fade-in 0.8s ease 1.5s both;
-}
-
-.pill {
-  border: 1.5px solid var(--ink);
-  border-radius: 999px;
-  padding: 9px 18px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: var(--paper);
-  transition:
-    background-color 0.25s ease,
-    color 0.25s ease,
-    transform 0.35s var(--ease-out);
-}
-
-.pill:hover {
-  background: var(--ink);
-  color: var(--paper);
-  transform: translateY(-3px);
-}
-
-.pill-more {
-  letter-spacing: 0.15em;
-  font-size: 9px;
-  display: grid;
-  place-items: center;
-}
-
+/* ---------- Bottom ticker ---------- */
 .ticker {
   overflow: hidden;
   background: var(--ink);
@@ -406,15 +283,6 @@ html.has-cursor * {
   }
 }
 
-@keyframes draw {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
 @keyframes marquee {
   to {
     transform: translateX(-50%);
@@ -430,32 +298,13 @@ html.has-cursor * {
 
 /* ---------- Small screens ---------- */
 @media (max-width: 640px) {
-  .nav {
-    grid-template-columns: auto 1fr;
-    gap: 16px;
-  }
-
-  .nav nav {
-    justify-content: flex-end;
-    gap: 6px 16px;
-  }
-
-  .nav nav a {
+  .nav-place {
     font-size: 11px;
     letter-spacing: 0.1em;
   }
 
-  .nav-place {
-    display: none;
-  }
-
   .hero-logo {
     width: min(72vw, 300px);
-  }
-
-  .pill {
-    padding: 8px 14px;
-    font-size: 11px;
   }
 }
 

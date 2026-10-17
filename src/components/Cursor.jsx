@@ -3,7 +3,7 @@ import { arrowPath, prefersReducedMotion } from '../arrow';
 
 const CURSOR_SCALE = 0.17;
 const CURSOR_PATH = arrowPath(0, 0, CURSOR_SCALE);
-const HOVER_TARGETS = 'a, button, .pill';
+const HOVER_TARGETS = 'a, button';
 
 /**
  * The logo's arrow as the mouse cursor. It is white with `mix-blend-mode: difference`,

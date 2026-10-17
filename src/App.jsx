@@ -1,6 +1,5 @@
 import AceLogo from './components/AceLogo';
 import Cursor from './components/Cursor';
-import Stats from './components/Stats';
 import Ticker from './components/Ticker';
 import { site } from './content';
 
@@ -13,13 +12,6 @@ export default function App() {
         <a className="nav-mark" href="/" aria-label="ACE home">
           <AceLogo />
         </a>
-        <nav aria-label="Main">
-          {site.nav.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
         <span className="nav-place">{site.place}</span>
       </header>
 
@@ -35,23 +27,9 @@ export default function App() {
         <p className="hero-college">{site.college}</p>
 
         <p className="hero-tagline">{site.tagline}</p>
-
-        <hr className="dash" />
-
-        <Stats items={site.stats} />
       </main>
 
       <footer className="foot">
-        <ul className="pills" aria-label="What we do">
-          {site.tags.map((tag) => (
-            <li key={tag} className="pill">
-              {tag}
-            </li>
-          ))}
-          <li className="pill pill-more" aria-label="More">
-            •••
-          </li>
-        </ul>
         <Ticker items={site.ticker} />
       </footer>
     </div>
