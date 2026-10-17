@@ -1,0 +1,475 @@
+/* ---------- Tokens ---------- */
+:root {
+  --paper: #ffffff;
+  --ink: #0a0a0a;
+  --muted: #5e5e5e;
+  --line: #d4d4d4;
+  --dot: rgba(10, 10, 10, 0.09);
+
+  --font-body: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-logo: 'Jost', 'Futura', 'Century Gothic', sans-serif;
+
+  --gutter: clamp(16px, 3vw, 32px);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Page frame ---------- */
+.page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+}
+
+/* Faint dot grid, fading out towards the edges */
+.page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(var(--dot) 1px, transparent 1.4px);
+  background-size: 26px 26px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 100%);
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 28px;
+  padding: 18px var(--gutter);
+  animation: fade-in 0.8s ease 1.6s both;
+}
+
+.nav-mark {
+  display: block;
+  width: 46px;
+  color: var(--ink);
+}
+
+.nav nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+}
+
+.nav nav a,
+.nav-place {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.nav nav a {
+  position: relative;
+  padding: 4px 0;
+}
+
+.nav nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.nav nav a:hover::after,
+.nav nav a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.nav-place {
+  color: var(--muted);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 4vh, 48px) var(--gutter);
+  text-align: center;
+}
+
+.hero-logo {
+  width: clamp(220px, 40vw, 440px);
+  height: auto;
+  color: var(--ink);
+}
+
+.hero-name {
+  margin-top: clamp(14px, 2.4vh, 26px);
+  font-size: clamp(17px, 2.9vw, 34px);
+  font-weight: 850;
+  font-stretch: 115%;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  animation: rise-in 0.9s var(--ease-out) 0.9s both;
+}
+
+.hero-college {
+  margin-top: 8px;
+  font-size: clamp(11px, 1.3vw, 14px);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  animation: rise-in 0.9s var(--ease-out) 1s both;
+}
+
+.hero-tagline {
+  margin-top: clamp(16px, 2.6vh, 26px);
+  max-width: 44ch;
+  color: var(--muted);
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.55;
+  animation: rise-in 0.9s var(--ease-out) 1.1s both;
+}
+
+/* Dashed rule, as on the letterhead */
+.dash {
+  width: min(420px, 80%);
+  height: 0;
+  margin: clamp(20px, 3.4vh, 34px) 0;
+  border: 0;
+  border-top: 1.5px dashed var(--ink);
+  opacity: 0.55;
+  transform-origin: center;
+  animation: draw 1s var(--ease-out) 1.2s both;
+}
+
+.stats {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: clamp(28px, 6vw, 72px);
+  animation: fade-in 0.8s ease 1.3s both;
+}
+
+.stats li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+
+.stat-num {
+  min-width: 2ch;
+  font-size: clamp(32px, 4vw, 46px);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Logo ---------- */
+.ace-logo {
+  display: block;
+  overflow: hidden;
+}
+
+.ace-letter {
+  font-family: var(--font-logo);
+  font-size: 205px;
+  font-weight: 700;
+}
+
+/* Letters wait for the font, then rise in one by one (only on the big logo) */
+.ace-logo.is-interactive .ace-letter {
+  opacity: 0;
+  transform: translateY(60px);
+  transform-box: fill-box;
+}
+
+.ace-logo.is-interactive.is-ready .ace-letter {
+  animation: letter-rise 0.9s var(--ease-out) forwards;
+  animation-delay: calc(var(--i) * 90ms + 80ms);
+}
+
+.ace-logo:not(.is-interactive) {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ace-logo:not(.is-interactive).is-ready {
+  opacity: 1;
+}
+
+/* ---------- Bottom: pills + ticker ---------- */
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 3vh, 28px);
+}
+
+.pills {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 var(--gutter);
+  animation: fade-in 0.8s ease 1.5s both;
+}
+
+.pill {
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--paper);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.35s var(--ease-out);
+}
+
+.pill:hover {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translateY(-3px);
+}
+
+.pill-more {
+  letter-spacing: 0.15em;
+  font-size: 9px;
+  display: grid;
+  place-items: center;
+}
+
+.ticker {
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 11px 0;
+  animation: fade-in 0.8s ease 1.6s both;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.ticker-run {
+  display: flex;
+}
+
+.ticker-run span {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  padding-right: 22px;
+  font-size: 12px;
+  font-weight: 700;
+  font-stretch: 115%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ticker-mark {
+  width: 10px;
+  height: 10px;
+  fill: currentColor;
+}
+
+/* ---------- Custom cursor ---------- */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  transform-origin: 0 0;
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  will-change: transform;
+}
+
+.cursor.is-visible {
+  opacity: 1;
+}
+
+.cursor svg {
+  display: block;
+  fill: #fff;
+}
+
+.click-ring {
+  position: fixed;
+  z-index: 99;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  animation: ring 0.7s var(--ease-out) forwards;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes letter-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ring {
+  to {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 640px) {
+  .nav {
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+  }
+
+  .nav nav {
+    justify-content: flex-end;
+    gap: 6px 16px;
+  }
+
+  .nav nav a {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .nav-place {
+    display: none;
+  }
+
+  .hero-logo {
+    width: min(72vw, 300px);
+  }
+
+  .pill {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .ticker-track {
+    animation: none;
+  }
+}

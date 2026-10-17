@@ -1,39 +1,28 @@
-# ACE GECW website
+# ACE · GEC Wayanad
 
-A single-page static site (HTML, CSS and a little JavaScript, no build step).
-It is served by GitHub Pages at **https://csegecw.github.io**.
+Website of ACE, the Association of Computer Engineers at Government Engineering College Wayanad.
+Vite + React, served by GitHub Pages at **https://csegecw.github.io**.
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
 
 ## Edit
 
-- `index.html`: text, nav links, focus pills, stats (the stats are placeholders, replace them).
-- `styles.css`: colours (`:root` variables at the top), fonts, spacing.
-- `script.js`: background dot effect and count-up numbers.
+- `src/content.js`: all text, nav links, stats (currently placeholders), pills and ticker.
+- `src/styles.css`: colours and fonts (tokens at the top), layout and animations.
+- `src/components/AceLogo.jsx`: the logo, redrawn as SVG from the original artwork. The arrow and
+  letters invert where they overlap.
+- `src/components/Cursor.jsx`: the logo arrow as the mouse cursor, plus click rings.
+- `src/arrow.js`: the arrow shape shared by the logo, cursor and favicon.
 
-## Preview locally
+## Deploy
 
-```bash
-cd csegecw.github.io
-python3 -m http.server 8000
-```
+Every push to `main` builds the site and publishes it with GitHub Actions
+(`.github/workflows/deploy.yml`).
 
-Then open http://localhost:8000.
-
-## Publish (GitHub Pages)
-
-The repository must be named exactly `csegecw.github.io` so the site lives at the root URL.
-
-1. Sign in to GitHub as `csegecw` (or as a member of that account with repo rights).
-2. Create a new **public** repository named `csegecw.github.io`.
-3. Push these files to the `main` branch:
-
-   ```bash
-   git init -b main
-   git add .
-   git commit -m "Initial ACE GECW landing page"
-   git remote add origin https://github.com/csegecw/csegecw.github.io.git
-   git push -u origin main
-   ```
-
-4. In the repository, go to **Settings → Pages**. Under *Build and deployment*, set *Source* to
-   **Deploy from a branch**, branch `main`, folder `/ (root)`, then save.
-5. Wait 1 to 2 minutes, then open https://csegecw.github.io.
+One-time setup: in the repo, go to **Settings → Pages → Build and deployment** and set *Source* to
+**GitHub Actions**.
