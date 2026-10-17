@@ -5,6 +5,7 @@ export const site = {
   place: 'Mananthavady · Wayanad',
   tagline:
     'The computer science student association of GEC Wayanad. Workshops, hackathons and talks, built by students for students.',
+  hint: 'Click the logo',
 
   ticker: ['Association of Computer Engineers', 'Government Engineering College Wayanad', 'Computer Science and Engineering'],
 };

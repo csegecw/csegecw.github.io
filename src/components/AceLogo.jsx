@@ -119,7 +119,9 @@ export default function AceLogo({ interactive = false, className = '', title = '
       <defs>
         <mask id={`${uid}-no-arrow`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="640">
           <rect x="0" y="0" width="640" height="640" fill="#fff" />
-          <path ref={maskArrow} d={ARROW} fill="#000" transform={startTransform} />
+          <g className="ace-press">
+            <path ref={maskArrow} d={ARROW} fill="#000" transform={startTransform} />
+          </g>
         </mask>
         <mask id={`${uid}-no-letters`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="640">
           <rect x="0" y="0" width="640" height="640" fill="#fff" />
@@ -133,7 +135,9 @@ export default function AceLogo({ interactive = false, className = '', title = '
         <Letters />
       </g>
       <g mask={`url(#${uid}-no-letters)`}>
-        <path ref={drawnArrow} className="ace-arrow" d={ARROW} fill="currentColor" transform={startTransform} />
+        <g className="ace-press">
+          <path ref={drawnArrow} className="ace-arrow" d={ARROW} fill="currentColor" transform={startTransform} />
+        </g>
       </g>
     </svg>
   );
