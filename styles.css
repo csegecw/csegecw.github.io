@@ -1,0 +1,255 @@
+:root {
+  --bg: #ffffff;
+  --ink: #111827;
+  --muted: #5b6372;
+  --line: #d9dde5;
+  --accent: #4f46e5;
+  --gutter: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Background dot field, drawn on canvas */
+#field {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Soft light that follows the pointer */
+.spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 40%),
+    rgba(79, 70, 229, 0.10),
+    transparent 70%
+  );
+}
+
+/* Layout: nav on top, hero centred, pills at the bottom */
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+.top {
+  padding: 22px var(--gutter);
+}
+
+.top nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+}
+
+.top a {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.top a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.top a:hover::after,
+.top a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.hero {
+  min-height: calc(100vh - 150px);
+  min-height: calc(100svh - 150px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px var(--gutter);
+  text-align: center;
+}
+
+/* Wordmark: letters rise in one by one */
+.wordmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(56px, 13vw, 176px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  user-select: none;
+}
+
+.wordmark .letter {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  animation: rise 1s cubic-bezier(0.2, 0.7, 0.1, 1) forwards;
+  animation-delay: calc(var(--i) * 70ms + 150ms);
+  transition: color 0.3s ease;
+}
+
+.wordmark .letter:hover {
+  color: var(--accent);
+}
+
+.wordmark .gap {
+  display: inline-block;
+  width: 0.22em;
+}
+
+@keyframes rise {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.tagline {
+  margin-top: 28px;
+  max-width: 34ch;
+  color: var(--muted);
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.5;
+  opacity: 0;
+  animation: fade 0.9s ease 1s forwards;
+}
+
+.stats {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: clamp(28px, 6vw, 64px);
+  margin-top: 40px;
+  opacity: 0;
+  animation: fade 0.9s ease 1.2s forwards;
+}
+
+.stats li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+
+.stats .num {
+  font-size: clamp(32px, 4vw, 44px);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.stats .label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@keyframes fade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Bottom pills */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 var(--gutter) 28px;
+  opacity: 0;
+  animation: fade 0.9s ease 1.4s forwards;
+}
+
+.pill {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--bg);
+  transition: border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  cursor: default;
+}
+
+.pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.pill--more {
+  letter-spacing: 0.2em;
+}
+
+@media (max-width: 560px) {
+  .top nav {
+    justify-content: center;
+  }
+
+  .stats {
+    gap: 32px;
+  }
+
+  .pill {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wordmark .letter,
+  .tagline,
+  .stats,
+  .tags {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .spotlight {
+    display: none;
+  }
+}
