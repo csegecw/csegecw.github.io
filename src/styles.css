@@ -200,14 +200,50 @@ a {
   animation: blink 1.05s steps(1) infinite;
 }
 
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(20px, 3.2vh, 32px);
+  padding: 13px 26px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.25s ease, color 0.25s ease;
+  animation: rise-in 0.9s var(--ease-out) 3.2s both;
+}
+
+.cta:hover {
+  background: transparent;
+  color: var(--ink);
+}
+
+.cta:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.cta-arrow {
+  transition: transform 0.25s var(--ease-out);
+}
+
+.cta:hover .cta-arrow {
+  transform: translateX(4px);
+}
+
 .hint {
-  margin-top: clamp(18px, 3vh, 30px);
+  margin-top: clamp(16px, 2.4vh, 24px);
   color: var(--muted);
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  animation: fade-in 0.8s ease 3.4s both;
+  animation: fade-in 0.8s ease 3.6s both;
 }
 
 /* The arrow "clicks" when the logo is pressed. Origin is the arrow tip, in logo units. */

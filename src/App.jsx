@@ -104,6 +104,13 @@ export default function App() {
 
         <TypeLine className="hero-tagline" text={site.tagline} delay={1500} />
 
+        <a className="cta" href={site.cta.href}>
+          {site.cta.label}
+          <span className="cta-arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+
         <p className="hint" aria-hidden="true">
           {site.hint}
         </p>

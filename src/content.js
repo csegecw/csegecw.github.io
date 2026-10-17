@@ -6,6 +6,7 @@ export const site = {
   tagline:
     'The computer science student association of GEC Wayanad. Workshops, hackathons and talks, built by students for students.',
   hint: 'Click the logo',
+  cta: { label: 'Execom call', href: '/execom/call/' },
 
   ticker: ['Association of Computer Engineers', 'Government Engineering College Wayanad', 'Computer Science and Engineering'],
 };
