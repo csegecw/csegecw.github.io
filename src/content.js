@@ -25,9 +25,9 @@ export const execomCall = {
   error: 'Something went wrong. Please try again.',
   fields: [
     { key: 'name', label: 'Name', type: 'text', autoComplete: 'name', required: true },
-    { key: 'email', label: 'Email', type: 'email', autoComplete: 'email', required: true },
-    { key: 'phone', label: 'Phone', type: 'tel', autoComplete: 'tel' },
-    { key: 'role', label: 'Role / position', type: 'text' },
-    { key: 'message', label: 'Message', type: 'textarea', rows: 4 },
+    { key: 'sem', label: 'Sem', type: 'select', options: ['S1', 'S3', 'S5', 'S7'], required: true },
+    { key: 'phone', label: 'Phone', type: 'tel', autoComplete: 'tel', required: true },
+    { key: 'capable', label: 'What are you capable of?', type: 'textarea', rows: 4 },
+    { key: 'skills', label: 'Skills', type: 'text', placeholder: 'e.g. React, Python, video editing' },
   ],
 };

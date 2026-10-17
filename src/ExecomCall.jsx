@@ -61,7 +61,18 @@ export default function ExecomCall() {
                   {f.label}
                   {f.required && <span aria-hidden="true"> *</span>}
                 </span>
-                {f.type === 'textarea' ? (
+                {f.type === 'select' ? (
+                  <select value={values[f.key]} onChange={set(f.key)} required={f.required}>
+                    <option value="" disabled>
+                      Select
+                    </option>
+                    {f.options.map((o) => (
+                      <option key={o} value={o}>
+                        {o}
+                      </option>
+                    ))}
+                  </select>
+                ) : f.type === 'textarea' ? (
                   <textarea value={values[f.key]} onChange={set(f.key)} rows={f.rows} maxLength={2000} />
                 ) : (
                   <input
@@ -70,6 +81,7 @@ export default function ExecomCall() {
                     onChange={set(f.key)}
                     autoComplete={f.autoComplete}
                     required={f.required}
+                    placeholder={f.placeholder}
                     maxLength={200}
                   />
                 )}
