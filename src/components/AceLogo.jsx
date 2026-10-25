@@ -82,8 +82,8 @@ export default function AceLogo({ interactive = false, className = '', title = '
         tx = Math.max(-1, Math.min(1, nx * 2)) * LEAN;
         ty = Math.max(-1, Math.min(1, ny * 2)) * LEAN;
       }
-      x += (tx - x) * 0.07;
-      y += (ty - y) * 0.07;
+      x += (tx - x) * 0.16;
+      y += (ty - y) * 0.16;
       apply();
       frame = requestAnimationFrame(tick);
     };
@@ -96,7 +96,7 @@ export default function AceLogo({ interactive = false, className = '', title = '
     // Let the letters rise first, then bring the arrow in.
     const start = setTimeout(() => {
       frame = requestAnimationFrame(tick);
-    }, 550);
+    }, 250);
 
     return () => {
       clearTimeout(start);

@@ -102,7 +102,7 @@ export default function App() {
         </p>
         <p className="hero-college">{site.college}</p>
 
-        <TypeLine className="hero-tagline" text={site.tagline} delay={1500} />
+        <TypeLine className="hero-tagline" text={site.tagline} delay={500} speed={8} />
 
         <a className="cta" href={site.cta.href}>
           {site.cta.label}
