@@ -92,7 +92,7 @@ export default function ExecomCall() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-muted/40">
+    <div className="flex min-h-screen flex-col bg-background">
       <header className="border-b bg-background">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-4">
           <a href="/" aria-label="ACE home">
@@ -103,7 +103,7 @@ export default function ExecomCall() {
       </header>
 
       <main className="mx-auto flex w-full max-w-xl flex-1 items-start px-4 py-10 sm:items-center sm:py-16">
-        <Card className="w-full shadow-sm">
+        <Card className="w-full gap-0 rounded-none border-0 bg-transparent p-0 shadow-none">
           {status === 'done' ? (
             <>
               <CardHeader className="items-center text-center" aria-live="polite">
