@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import ExecomCall from './ExecomCall';
-import './styles.css';
+import './execom.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
