@@ -14,7 +14,7 @@ export const site = {
 // The /execom/call form. `endpoint` is a Google Apps Script web app that appends each entry to a sheet.
 export const execomCall = {
   endpoint:
-    'https://script.google.com/macros/s/AKfycbwCfASpFpGFP33FksCx-oULwJ2C2o91REaHyMVxAfj3GpA_PPPcLNp5VuRDLvsAdRWPSw/exec',
+    'https://script.google.com/macros/s/AKfycby6NCMQd_VNQ-DrnzkIGhLw6ZSLqjZPYBRE2Hpc6Bt7wYeLIC1Sic5X7ns_5QPBCEAEfA/exec',
   title: 'Execom call',
   intro: 'Want to help run ACE? Tell us a little about yourself and we will get in touch.',
   submit: 'Submit',
