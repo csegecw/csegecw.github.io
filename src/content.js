@@ -15,7 +15,6 @@ export const site = {
 // appends each entry to a sheet and stores the resume in Drive. Paste the "/exec" URL here.
 export const placement = {
   endpoint: 'https://script.google.com/macros/s/AKfycbyOWQuqvtq2gShXpotWmbbw2e5i8wYpB86UT54JeT04YJL-8ycASJBvvzGH3w2yyM2ApQ/exec',
-  badge: 'For the CSE Placement Cell · GEC Wayanad',
   title: 'Placement data collection',
   intro:
     'Fill this in once. The placement cell of GEC Wayanad uses it to invite you to company drives, trainings and campus opportunities that match your skills.',
@@ -25,6 +24,15 @@ export const placement = {
     'Takes about two minutes.',
   ],
   consent: 'I agree to share these details with the CSE placement cell of GEC Wayanad.',
+  steps: [
+    { title: 'Your details', hint: 'How the placement cell can reach you.' },
+    { title: 'Skills', hint: 'Select everything you are comfortable with.' },
+    { title: 'Resume and achievements', hint: 'Attach your resume and tell us what you have done.' },
+    { title: 'Review and submit', hint: 'Check your details before sending.' },
+  ],
+  next: 'Next',
+  back: 'Back',
+  skillsError: 'Select at least one skill or add your own.',
   submit: 'Submit',
   sending: 'Sending…',
   doneTitle: 'Thank you',

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { CheckCircle2, FileText, Loader2, ShieldCheck, Upload, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, FileText, Loader2, Upload, X } from 'lucide-react';
 import AceLogo from './components/AceLogo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -43,7 +43,10 @@ export default function Placement() {
   const [file, setFile] = useState(null);
   const [fileProblem, setFileProblem] = useState('');
   const [status, setStatus] = useState('idle'); // idle | sending | done | error
+  const [step, setStep] = useState(0);
+  const [skillsProblem, setSkillsProblem] = useState('');
   const fileRef = useRef(null);
+  const last = step === copy.steps.length - 1;
 
   const set = (key) => (v) => setValues((s) => ({ ...s, [key]: v }));
   const text = (key) => (e) => set(key)(e.target.value);
@@ -73,14 +76,30 @@ export default function Placement() {
     if (fileRef.current) fileRef.current.value = '';
   };
 
+  const goBack = () => {
+    setStatus('idle');
+    setStep((n) => Math.max(0, n - 1));
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    if (form.get('website')) return; // honeypot: real people never fill this in
-    if (!file) {
+    // Only the current step's fields are rendered, so native validation covers just this step.
+    if (step === 1 && !values.skills.length && !values.otherSkills.trim()) {
+      setSkillsProblem(copy.skillsError);
+      return;
+    }
+    setSkillsProblem('');
+    if (step === 2 && !file) {
       setFileProblem('Please attach your resume.');
       return;
     }
+    if (!last) {
+      setStep((n) => n + 1);
+      window.scrollTo({ top: 0 });
+      return;
+    }
+    const form = new FormData(e.currentTarget);
+    if (form.get('website')) return; // honeypot: real people never fill this in
     setStatus('sending');
     try {
       const payload = {
@@ -98,6 +117,7 @@ export default function Placement() {
       if (!result.ok) throw new Error(result.error);
       setValues(empty);
       clearFile();
+      setStep(0);
       setStatus('done');
     } catch {
       setStatus('error');
@@ -132,144 +152,199 @@ export default function Placement() {
         ) : (
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="space-y-4">
-              <span className="inline-flex items-center gap-2 rounded-full border bg-secondary px-3 py-1 text-xs font-medium">
-                <ShieldCheck className="size-3.5" aria-hidden="true" />
-                {copy.badge}
-              </span>
               <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{copy.title}</h1>
-              <p className="text-muted-foreground">{copy.intro}</p>
-              <ul className="space-y-1.5 rounded-lg border bg-secondary/50 p-4 text-sm">
-                {copy.points.map((p) => (
-                  <li key={p} className="flex gap-2">
-                    <CheckCircle2 className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Your details</CardTitle>
-              </CardHeader>
-              <CardContent className="grid gap-5 sm:grid-cols-2">
-                <Field id="f-name" label="Full name" required className="sm:col-span-2">
-                  <Input id="f-name" value={values.name} onChange={text('name')} autoComplete="name" required maxLength={120} />
-                </Field>
-                <Field id="f-email" label="Email" required>
-                  <Input id="f-email" type="email" value={values.email} onChange={text('email')} autoComplete="email" required maxLength={200} />
-                </Field>
-                <Field id="f-phone" label="Phone" required>
-                  <Input id="f-phone" type="tel" value={values.phone} onChange={text('phone')} autoComplete="tel" required maxLength={20} />
-                </Field>
-                <Field id="f-sem" label="Sem" required>
-                  <Select name="sem" value={values.sem} onValueChange={set('sem')} required>
-                    <SelectTrigger id="f-sem" className="w-full">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {copy.sems.map((s) => (
-                        <SelectItem key={s} value={s}>
-                          {s}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Skills</CardTitle>
-                <CardDescription>Pick everything you are comfortable with.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex flex-wrap gap-2" role="group" aria-label="Skills">
-                  {copy.skills.map((s) => {
-                    const on = values.skills.includes(s);
-                    return (
-                      <button
-                        key={s}
-                        type="button"
-                        aria-pressed={on}
-                        onClick={() => toggleSkill(s)}
-                        className={cn(
-                          'rounded-full border px-3 py-1.5 text-sm transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50',
-                          on ? 'border-primary bg-primary text-primary-foreground' : 'bg-background hover:bg-accent',
-                        )}
-                      >
-                        {s}
-                      </button>
-                    );
-                  })}
-                </div>
-                <Field id="f-other" label="Other skills">
-                  <Input id="f-other" value={values.otherSkills} onChange={text('otherSkills')} placeholder="e.g. Go, Figma, Blender" maxLength={200} />
-                </Field>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Resume and achievements</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                <Field id="f-resume" label="Resume" required hint={`PDF, DOC or DOCX, up to ${copy.maxFileMB} MB.`}>
-                  <input ref={fileRef} id="f-resume" type="file" accept=".pdf,.doc,.docx" onChange={pickFile} className="sr-only" />
-                  {file ? (
-                    <div className="flex items-center gap-3 rounded-md border p-3 text-sm">
-                      <FileText className="size-5 shrink-0" aria-hidden="true" />
-                      <span className="min-w-0 flex-1 truncate">{file.name}</span>
-                      <Button type="button" variant="ghost" size="icon" onClick={clearFile} aria-label="Remove file">
-                        <X className="size-4" aria-hidden="true" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button type="button" variant="outline" className="w-full border-dashed py-6" onClick={() => fileRef.current?.click()}>
-                      <Upload className="size-4" aria-hidden="true" />
-                      Upload resume
-                    </Button>
-                  )}
-                  {fileProblem && (
-                    <p className="text-sm text-destructive" role="alert">
-                      {fileProblem}
-                    </p>
-                  )}
-                </Field>
-                <Field
-                  id="f-ach"
-                  label="Achievements"
-                  hint="Hackathon wins, competitions, projects, certifications, internships, open source."
-                >
-                  <Textarea id="f-ach" value={values.achievements} onChange={text('achievements')} rows={5} maxLength={2000} />
-                </Field>
-              </CardContent>
-            </Card>
-
-            <label className="flex items-start gap-3 text-sm">
-              <input
-                type="checkbox"
-                required
-                checked={values.consent}
-                onChange={(e) => set('consent')(e.target.checked)}
-                className="mt-0.5 size-4 shrink-0 accent-foreground"
-              />
-              {copy.consent}
-            </label>
-            <input className="sr-only" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-
-            <div className="space-y-3">
-              <Button type="submit" size="lg" className="w-full" disabled={status === 'sending'}>
-                {status === 'sending' && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
-                {status === 'sending' ? copy.sending : copy.submit}
-              </Button>
-              {status === 'error' && (
-                <p className="text-center text-sm text-destructive" role="alert">
-                  {copy.error}
-                </p>
+              {step === 0 && (
+                <>
+                  <p className="text-muted-foreground">{copy.intro}</p>
+                  <ul className="space-y-1.5 rounded-lg border bg-secondary/50 p-4 text-sm">
+                    {copy.points.map((p) => (
+                      <li key={p} className="flex gap-2">
+                        <CheckCircle2 className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
             </div>
+
+            <div aria-label="Progress" className="space-y-2">
+              <div className="flex gap-1.5">
+                {copy.steps.map((s, i) => (
+                  <div key={s.title} className={cn('h-1.5 flex-1 rounded-full', i <= step ? 'bg-primary' : 'bg-secondary')} />
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Step {step + 1} of {copy.steps.length}
+              </p>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>{copy.steps[step].title}</CardTitle>
+                <CardDescription>{copy.steps[step].hint}</CardDescription>
+              </CardHeader>
+
+              {step === 0 && (
+                <CardContent className="grid gap-5 sm:grid-cols-2">
+                  <Field id="f-name" label="Full name" required className="sm:col-span-2">
+                    <Input id="f-name" value={values.name} onChange={text('name')} autoComplete="name" required maxLength={120} />
+                  </Field>
+                  <Field id="f-email" label="Email" required>
+                    <Input id="f-email" type="email" value={values.email} onChange={text('email')} autoComplete="email" required maxLength={200} />
+                  </Field>
+                  <Field id="f-phone" label="Phone" required>
+                    <Input id="f-phone" type="tel" value={values.phone} onChange={text('phone')} autoComplete="tel" required maxLength={20} />
+                  </Field>
+                  <Field id="f-sem" label="Sem" required>
+                    <Select name="sem" value={values.sem} onValueChange={set('sem')} required>
+                      <SelectTrigger id="f-sem" className="w-full">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {copy.sems.map((s) => (
+                          <SelectItem key={s} value={s}>
+                            {s}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                </CardContent>
+              )}
+
+              {step === 1 && (
+                <CardContent className="space-y-5">
+                  <ul className="grid gap-2 sm:grid-cols-2" aria-label="Skills">
+                    {copy.skills.map((s) => {
+                      const on = values.skills.includes(s);
+                      return (
+                        <li key={s}>
+                          <button
+                            type="button"
+                            role="checkbox"
+                            aria-checked={on}
+                            onClick={() => toggleSkill(s)}
+                            className={cn(
+                              'flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50',
+                              on ? 'border-primary bg-secondary font-medium' : 'bg-background hover:bg-accent',
+                            )}
+                          >
+                            <span
+                              className={cn(
+                                'flex size-5 shrink-0 items-center justify-center rounded border',
+                                on ? 'border-primary bg-primary text-primary-foreground' : 'border-input',
+                              )}
+                            >
+                              {on && <Check className="size-3.5" aria-hidden="true" />}
+                            </span>
+                            {s}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <Field id="f-other" label="Other skills">
+                    <Input id="f-other" value={values.otherSkills} onChange={text('otherSkills')} placeholder="e.g. Go, Figma, Blender" maxLength={200} />
+                  </Field>
+                  {skillsProblem && (
+                    <p className="text-sm text-destructive" role="alert">
+                      {skillsProblem}
+                    </p>
+                  )}
+                </CardContent>
+              )}
+
+              {step === 2 && (
+                <CardContent className="space-y-5">
+                  <Field id="f-resume" label="Resume" required hint={`PDF, DOC or DOCX, up to ${copy.maxFileMB} MB.`}>
+                    <input ref={fileRef} id="f-resume" type="file" accept=".pdf,.doc,.docx" onChange={pickFile} className="sr-only" />
+                    {file ? (
+                      <div className="flex items-center gap-3 rounded-md border p-3 text-sm">
+                        <FileText className="size-5 shrink-0" aria-hidden="true" />
+                        <span className="min-w-0 flex-1 truncate">{file.name}</span>
+                        <Button type="button" variant="ghost" size="icon" onClick={clearFile} aria-label="Remove file">
+                          <X className="size-4" aria-hidden="true" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button type="button" variant="outline" className="w-full border-dashed py-6" onClick={() => fileRef.current?.click()}>
+                        <Upload className="size-4" aria-hidden="true" />
+                        Upload resume
+                      </Button>
+                    )}
+                    {fileProblem && (
+                      <p className="text-sm text-destructive" role="alert">
+                        {fileProblem}
+                      </p>
+                    )}
+                  </Field>
+                  <Field
+                    id="f-ach"
+                    label="Achievements"
+                    hint="Hackathon wins, competitions, projects, certifications, internships, open source."
+                  >
+                    <Textarea id="f-ach" value={values.achievements} onChange={text('achievements')} rows={5} maxLength={2000} />
+                  </Field>
+                </CardContent>
+              )}
+
+              {step === 3 && (
+                <CardContent className="space-y-5">
+                  <dl className="divide-y rounded-lg border text-sm">
+                    {[
+                      ['Name', values.name],
+                      ['Email', values.email],
+                      ['Phone', values.phone],
+                      ['Sem', values.sem],
+                      ['Skills', [...values.skills, values.otherSkills].filter(Boolean).join(', ')],
+                      ['Resume', file?.name],
+                      ['Achievements', values.achievements],
+                    ].map(([k, v]) => (
+                      <div key={k} className="grid gap-1 px-3 py-2 sm:grid-cols-[8rem_1fr]">
+                        <dt className="text-muted-foreground">{k}</dt>
+                        <dd className="whitespace-pre-wrap break-words">{v || '—'}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <label className="flex items-start gap-3 text-sm">
+                    <input
+                      type="checkbox"
+                      required
+                      checked={values.consent}
+                      onChange={(e) => set('consent')(e.target.checked)}
+                      className="mt-0.5 size-4 shrink-0 accent-foreground"
+                    />
+                    {copy.consent}
+                  </label>
+                  <input className="sr-only" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+                </CardContent>
+              )}
+
+              <CardFooter className="justify-between gap-3">
+                <Button type="button" variant="outline" onClick={goBack} className={cn(step === 0 && 'invisible')}>
+                  <ArrowLeft className="size-4" aria-hidden="true" />
+                  {copy.back}
+                </Button>
+                {last ? (
+                  <Button type="submit" disabled={status === 'sending'}>
+                    {status === 'sending' && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
+                    {status === 'sending' ? copy.sending : copy.submit}
+                  </Button>
+                ) : (
+                  <Button type="submit">
+                    {copy.next}
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </Button>
+                )}
+              </CardFooter>
+            </Card>
+
+            {status === 'error' && (
+              <p className="text-center text-sm text-destructive" role="alert">
+                {copy.error}
+              </p>
+            )}
           </form>
         )}
       </main>
