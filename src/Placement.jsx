@@ -21,6 +21,27 @@ const readBase64 = (file) =>
     r.readAsDataURL(file);
   });
 
+// fetch() can't report upload progress, so this uses XHR. text/plain keeps it a "simple" request,
+// so the browser skips the CORS preflight that Apps Script can't answer.
+function postJson(url, body, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
+    xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(Math.round((e.loaded / e.total) * 100));
+    xhr.upload.onload = () => onProgress(100);
+    xhr.onload = () => {
+      try {
+        resolve(JSON.parse(xhr.responseText));
+      } catch (err) {
+        reject(err);
+      }
+    };
+    xhr.onerror = () => reject(new Error('network'));
+    xhr.send(body);
+  });
+}
+
 function Field({ id, label, required, hint, className, children }) {
   return (
     <div className={cn('space-y-2', className)}>
@@ -44,6 +65,7 @@ export default function Placement() {
   const [fileProblem, setFileProblem] = useState('');
   const [status, setStatus] = useState('idle'); // idle | sending | done | error
   const [step, setStep] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [skillsProblem, setSkillsProblem] = useState('');
   const fileRef = useRef(null);
   const last = step === copy.steps.length - 1;
@@ -100,6 +122,7 @@ export default function Placement() {
     }
     const form = new FormData(e.currentTarget);
     if (form.get('website')) return; // honeypot: real people never fill this in
+    setProgress(0);
     setStatus('sending');
     try {
       const payload = {
@@ -107,13 +130,7 @@ export default function Placement() {
         skills: values.skills.join(', '),
         resume: { name: file.name, type: file.type || 'application/octet-stream', data: await readBase64(file) },
       };
-      // text/plain keeps this a "simple" request, so the browser skips the CORS preflight Apps Script can't answer.
-      const res = await fetch(copy.endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload),
-      });
-      const result = await res.json();
+      const result = await postJson(copy.endpoint, JSON.stringify(payload), setProgress);
       if (!result.ok) throw new Error(result.error);
       setValues(empty);
       clearFile();
@@ -137,18 +154,14 @@ export default function Placement() {
 
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-10 sm:py-14">
         {status === 'done' ? (
-          <Card className="items-center text-center">
-            <CardHeader className="items-center" aria-live="polite">
-              <CheckCircle2 className="mb-2 size-10" aria-hidden="true" />
-              <CardTitle className="text-2xl">{copy.doneTitle}</CardTitle>
-              <CardDescription>{copy.doneText}</CardDescription>
-            </CardHeader>
-            <CardFooter>
-              <Button variant="outline" onClick={() => setStatus('idle')}>
-                {copy.another}
-              </Button>
-            </CardFooter>
-          </Card>
+          <div className="flex flex-col items-center gap-4 rounded-xl border bg-card px-6 py-12 text-center" aria-live="polite">
+            <CheckCircle2 className="size-12" aria-hidden="true" />
+            <h1 className="text-2xl font-extrabold tracking-tight">{copy.doneTitle}</h1>
+            <p className="max-w-sm text-balance text-muted-foreground">{copy.doneText}</p>
+            <Button variant="outline" onClick={() => setStatus('idle')}>
+              {copy.another}
+            </Button>
+          </div>
         ) : (
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="space-y-4">
@@ -348,6 +361,37 @@ export default function Placement() {
           </form>
         )}
       </main>
+
+      {status === 'sending' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="up-title">
+          <div className="w-full max-w-sm space-y-4 rounded-xl border bg-background p-6 shadow-lg">
+            <div className="flex items-center gap-3">
+              <Loader2 className="size-5 shrink-0 animate-spin" aria-hidden="true" />
+              <h2 id="up-title" className="font-semibold">
+                {progress < 100 ? 'Uploading your details' : 'Saving…'}
+              </h2>
+            </div>
+            {file && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <FileText className="size-4 shrink-0" aria-hidden="true" />
+                <span className="min-w-0 flex-1 truncate">{file.name}</span>
+              </div>
+            )}
+            <div
+              className="h-2 w-full overflow-hidden rounded-full bg-secondary"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={progress}
+            >
+              <div className={cn('h-full rounded-full bg-primary transition-[width] duration-200', progress >= 100 && 'animate-pulse')} style={{ width: `${progress}%` }} />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {progress < 100 ? `${progress}% uploaded. Please keep this page open.` : 'Upload complete. Finishing up, this can take a few seconds.'}
+            </p>
+          </div>
+        </div>
+      )}
 
       <footer className="py-6 text-center text-xs text-muted-foreground">{site.ticker.slice(0, 2).join(' · ')}</footer>
     </div>

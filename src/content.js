@@ -41,10 +41,10 @@ export const placement = {
   error: 'Something went wrong. Please try again.',
   fileError: 'Please upload a PDF, DOC or DOCX under 5 MB.',
   maxFileMB: 5,
-  sems: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'Passed out'],
+  sems: ['S1', 'S3', 'S5', 'S7'],
   skills: [
     'C / C++', 'Java', 'Python', 'JavaScript', 'React', 'Node.js', 'HTML / CSS', 'SQL / Databases',
     'Data Structures & Algorithms', 'Machine Learning / AI', 'Data Analysis', 'Android / Flutter',
-    'Cloud / DevOps', 'Cybersecurity', 'UI / UX Design', 'Git / GitHub', 'Embedded / IoT', 'Competitive Programming',
+    'Cloud / DevOps', 'Cybersecurity', 'UI / UX Design', 'Git / GitHub', 'Claude Code','Embedded / IoT', 'Competitive Programming',
   ],
 };
