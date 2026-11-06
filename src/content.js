@@ -6,28 +6,37 @@ export const site = {
   tagline:
     'The computer science student association of GEC Wayanad. Workshops, hackathons and talks, built by students for students.',
   hint: 'Click the logo',
-  cta: { label: 'Execom call', href: '/execom/call/' },
+  cta: { label: 'Placement data', href: '/placement/' },
 
   ticker: ['Association of Computer Engineers', 'Government Engineering College Wayanad', 'Computer Science and Engineering'],
 };
 
-// The /execom/call form. `endpoint` is a Google Apps Script web app that appends each entry to a sheet.
-export const execomCall = {
-  endpoint:
-    'https://script.google.com/macros/s/AKfycby6NCMQd_VNQ-DrnzkIGhLw6ZSLqjZPYBRE2Hpc6Bt7wYeLIC1Sic5X7ns_5QPBCEAEfA/exec',
-  title: 'Execom call',
-  intro: 'Want to help run ACE? Tell us a little about yourself and we will get in touch.',
+// The /placement form. `endpoint` is the Google Apps Script web app (apps-script/placement.gs) that
+// appends each entry to a sheet and stores the resume in Drive. Paste the "/exec" URL here.
+export const placement = {
+  endpoint: 'https://script.google.com/macros/s/AKfycbyOWQuqvtq2gShXpotWmbbw2e5i8wYpB86UT54JeT04YJL-8ycASJBvvzGH3w2yyM2ApQ/exec',
+  badge: 'For the CSE Placement Cell · GEC Wayanad',
+  title: 'Placement data collection',
+  intro:
+    'Fill this in once. The placement cell of GEC Wayanad uses it to invite you to company drives, trainings and campus opportunities that match your skills.',
+  points: [
+    'Shared only with the CSE placement cell.',
+    'Used only to contact you about placement opportunities.',
+    'Takes about two minutes.',
+  ],
+  consent: 'I agree to share these details with the CSE placement cell of GEC Wayanad.',
   submit: 'Submit',
   sending: 'Sending…',
   doneTitle: 'Thank you',
-  doneText: 'Your entry is in. We will be in touch soon.',
+  doneText: 'Your details are with the placement cell. They will reach out when something matches your profile.',
   another: 'Submit another',
   error: 'Something went wrong. Please try again.',
-  fields: [
-    { key: 'name', label: 'Name', type: 'text', autoComplete: 'name', required: true },
-    { key: 'sem', label: 'Sem', type: 'select', options: ['S1', 'S3', 'S5', 'S7'], required: true },
-    { key: 'phone', label: 'Phone', type: 'tel', autoComplete: 'tel', required: true },
-    { key: 'capable', label: 'What are you capable of?', type: 'textarea', rows: 4 },
-    { key: 'skills', label: 'Skills', type: 'text', placeholder: 'e.g. React, Python, video editing' },
+  fileError: 'Please upload a PDF, DOC or DOCX under 5 MB.',
+  maxFileMB: 5,
+  sems: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'Passed out'],
+  skills: [
+    'C / C++', 'Java', 'Python', 'JavaScript', 'React', 'Node.js', 'HTML / CSS', 'SQL / Databases',
+    'Data Structures & Algorithms', 'Machine Learning / AI', 'Data Analysis', 'Android / Flutter',
+    'Cloud / DevOps', 'Cybersecurity', 'UI / UX Design', 'Git / GitHub', 'Embedded / IoT', 'Competitive Programming',
   ],
 };
